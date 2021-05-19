@@ -1,7 +1,5 @@
 import { useContext } from "react";
 import { AppContext } from "../Store";
-import { useHistory } from "react-router-dom";
-import { getQuestions } from "../services";
 import styled from "styled-components";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -11,17 +9,16 @@ import TextField from "@material-ui/core/TextField";
 import Container from "@material-ui/core/Container";
 
 export default () => {
-  const { numberOfQuestions, setNumberOfQuestions, setQuestions } =
-    useContext(AppContext);
+  const { numberOfQuestions, setNumberOfQuestions } = useContext(AppContext);
 
-  const nextStep = async () => {
+  const nextStep = () => {
+    console.log(numberOfQuestions);
     if (numberOfQuestions > 0) {
-      const questions = await getQuestions(numberOfQuestions);
-      setQuestions(questions.data);
+      localStorage.setItem("numberOfQuestions", numberOfQuestions);
+      setTimeout(() => {
+        window.location.href = "/questions";
+      }, 1000);
     }
-    setTimeout(() => {
-      window.location.href = "/questions";
-    }, 2000);
   };
 
   const CardWrapper = styled.div`
@@ -71,7 +68,7 @@ export default () => {
             />
 
             <ButtonWrapper>
-              <Button onClick={nextStep()} variant="contained" color="primary">
+              <Button onClick={nextStep} variant="contained" color="primary">
                 Start
               </Button>
             </ButtonWrapper>
